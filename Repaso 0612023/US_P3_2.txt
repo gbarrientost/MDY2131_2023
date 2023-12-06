@@ -1,0 +1,19 @@
+CREATE OR REPLACE VIEW V_INFORME_TCASA AS
+SELECT 'En la comuna de '||LPAD(UPPER(c.nombre_comuna),15,'*') ||' contamos con: '||COUNT(p.nro_propiedad) ||
+CASE WHEN COUNT(p.nro_propiedad)=1 THEN ' propiedad del tipo '
+     ELSE ' propiedades del tipo '
+END
+||UPPER(tp.desc_tipo_propiedad) "INFORME DETALLE PROPIEDADES"
+FROM US_P3_1.syn_p p  
+INNER JOIN US_P3_1.syn_co c ON (p.id_comuna=c.id_comuna)
+INNER JOIN US_P3_1.syn_tp tp ON (p.id_tipo_propiedad= tp.id_tipo_propiedad)
+WHERE p.id_tipo_propiedad IN('A','C')
+GROUP BY c.nombre_comuna, tp.desc_tipo_propiedad
+ORDER BY c.nombre_comuna, tp.desc_tipo_propiedad
+WITH READ ONLY;
+
+SELECT * FROM V_INFORME_TCASA;
+
+--GRANT SELECT ON US_P3_2.V_INFORME_TCASA TO US_P3_3;
+
+
